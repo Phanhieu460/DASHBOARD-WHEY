@@ -1,9 +1,13 @@
 import { FacebookOutlined, InstagramOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Icon from "../../components/Icon/Icon";
-import {SiGmail} from "react-icons/si"
-import { Link } from "react-router-dom";
+import { SiGmail } from "react-icons/si";
+import { Link, useNavigate } from "react-router-dom";
+import { Form } from "antd";
+import { register } from "../../features/Auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { openNotification } from "../../util/notification";
 
 const SignUp = () => {
   const FacebookBackground =
@@ -12,20 +16,183 @@ const SignUp = () => {
     "linear-gradient(to right, #A12AC4 0%, #ED586C 40%, #F0A853 100%)";
   const TwitterBackground =
     "linear-gradient(to right, #56C1E1 0%, #35A9CE 50%)";
-    const GmailBackground =
+  const GmailBackground =
     "linear-gradient(to right, #4285F4 , #BB001B , #EA4335 , #FBBC05 , #34A853 )";
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("")
+  const [fullName, setFullName] = useState("")
+  const [address, setAddress] = useState("")
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isSuccess, message } = useSelector((state) => state.auth);
+  
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/")
+      openNotification("success", "Success", message)
+     }
+  }, [isSuccess])
+  
+
+  const onFinish = (e) => {
+    const userData = {
+      username,
+      password,
+      phone, 
+      fullName
+    };
+
+    dispatch(register(userData));
+
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
     <MainContainer>
       <MainBox>
-        <WelcomeText>Welcome</WelcomeText>
-        <InputContainer>
-          <StyledInput type="text" placeholder="Tên Đăng Nhập" />
-          <StyledInput type="password" placeholder="Mật Khẩu" />
-        </InputContainer>
-        <ButtonContainer>
-          <StyledButton content="Đăng Nhập" />
-        </ButtonContainer>
-        <LoginWith>Hoặc Đăng Nhập Với</LoginWith>
+        <WelcomeText>Đăng Ký Tài Khoản</WelcomeText>
+        <Form
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          style={{ width: "100%" }}
+        >
+          <Form.Item
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: (
+                  <InputContainer>Please input your email!</InputContainer>
+                ),
+              },
+              {
+                min: 5,
+                message: (
+                  <InputContainer>
+                    Username must be at least 5 characters long.
+                  </InputContainer>
+                ),
+              },
+            ]}
+          >
+            <InputContainer>
+              <StyledInput
+                type="email"
+                placeholder="Email"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </InputContainer>
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: (
+                  <InputContainer>Please input your password!</InputContainer>
+                ),
+              },
+              {
+                min: 5,
+                message: (
+                  <InputContainer>
+                    Password must be at least 5 characters long.
+                  </InputContainer>
+                ),
+              },
+            ]}
+          >
+            <InputContainer>
+              <StyledInput
+                type="password"
+                placeholder="Mật Khẩu"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </InputContainer>
+          </Form.Item>
+          <Form.Item
+            name="fullName"
+            rules={[
+              {
+                required: true,
+                message: (
+                  <InputContainer>Please input your fullName!</InputContainer>
+                ),
+              },
+              {
+                min: 5,
+                message: (
+                  <InputContainer>
+                    Fullname must be at least 5 characters long.
+                  </InputContainer>
+                ),
+              },
+            ]}
+          >
+            <InputContainer>
+              <StyledInput
+                type="text"
+                placeholder="Fullname"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </InputContainer>
+          </Form.Item>
+          <Form.Item
+            name="phone"
+            rules={[
+              {
+                required: true,
+                message: (
+                  <InputContainer>Please input your Phone!</InputContainer>
+                ),
+              },
+              {
+                min: 10,
+                message: (
+                  <InputContainer>
+                    Phone must be at least 10 characters long.
+                  </InputContainer>
+                ),
+              },
+            ]}
+          >
+            <InputContainer>
+              <StyledInput
+                type="text"
+                placeholder="Phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </InputContainer>
+          </Form.Item>
+          {/* <Form.Item
+            name="address"
+          >
+            <InputContainer>
+              <StyledInput
+                type="text"
+                placeholder="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </InputContainer>
+          </Form.Item> */}
+          <Form.Item>
+            <ButtonContainer>
+              <StyledButton>Đăng Ký</StyledButton>
+            </ButtonContainer>
+          </Form.Item>
+        </Form>
+        <LoginWith>Hoặc Đăng Ký Với</LoginWith>
         <HorizontalRule />
         <IconsContainer>
           <Icon color={FacebookBackground}>
@@ -35,10 +202,12 @@ const SignUp = () => {
             <InstagramOutlined />
           </Icon>
           <Icon color={GmailBackground}>
-          <SiGmail/>
+            <SiGmail />
           </Icon>
         </IconsContainer>
-        <ForgotPassword>Bạn Chưa Có Tài Khoản? <Link to="/signup">Đăng Ký</Link></ForgotPassword>
+        <ForgotPassword>
+          Bạn Đã Có Tài Khoản? <Link to="/login">Đăng Nhập</Link>
+        </ForgotPassword>
       </MainBox>
     </MainContainer>
   );
@@ -134,10 +303,10 @@ const StyledButton = styled.button`
   color: white;
   border-radius: 2rem;
   cursor: pointer;
-`
+`;
 
 const StyledInput = styled.input`
-   background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   border-radius: 2rem;
   width: 80%;
@@ -159,7 +328,7 @@ const StyledInput = styled.input`
     font-weight: 100;
     font-size: 1rem;
   }
-`
+`;
 
 const LoginWith = styled.span`
   color: black;

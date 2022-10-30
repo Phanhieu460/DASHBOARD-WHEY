@@ -20,9 +20,18 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSystemDaydreamOutlined";
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/Auth/authSlice";
 
 const SideBar = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate("/login")
+  }
   return (
     <Container>
       <Top>
@@ -33,29 +42,29 @@ const SideBar = () => {
       <hr />
       <Center>
         <ul>
-          <Title>MAIN</Title>
+          {/* <Title>MAIN</Title>
           <Link to="/" style={{ textDecoration: "none" }}>
             <li>
               <DashboardIcon className="icon" />
               <span>Dashboard</span>
             </li>
-          </Link>
-          <Title>LISTS</Title>
-          <Link to="/user" style={{ textDecoration: "none" }}>
+          </Link> */}
+          <Title>Danh Sách</Title>
+          <Link to="/customer" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
-              <span>Users</span>
+              <span>Khách Hàng</span>
             </li>
           </Link>
           <Link to="/product" style={{ textDecoration: "none" }}>
             <li>
               <StoreIcon className="icon" />
-              <span>Products</span>
+              <span>Sản Phẩm</span>
             </li>
           </Link>
           <li>
             <CreditCardIcon className="icon" />
-            <span>Orders</span>
+            <span>Đặt Hàng</span>
           </li>
           <Link to="/blog" style={{ textDecoration: "none" }}>
             <li>
@@ -67,14 +76,14 @@ const SideBar = () => {
           <Title>USER</Title>
           <li>
             <AccountCircleOutlinedIcon className="icon" />
-            <span>Profile</span>
+            <span>Hồ Sơ</span>
           </li>
-          <Link to="/login" style={{ textDecoration: "none" }}>
-            <li>
+          {/* <Link to="/login" style={{ textDecoration: "none" }}> */}
+            <li onClick={handleLogout}>
               <ExitToAppIcon className="icon" />
-              <span>Logout</span>
+              <span>Đăng Xuất</span>
             </li>
-          </Link>
+          {/* </Link> */}
         </ul>
       </Center>
     </Container>
@@ -97,7 +106,7 @@ const Top = styled.div`
   .logo {
     font-size: 20px;
     font-weight: bold;
-    color: #6439ff;
+    color: #d92329;
   }
 `;
 const Center = styled.div`
@@ -118,7 +127,7 @@ const Center = styled.div`
 
       .icon {
         font-size: 24px;
-        color: #7451f8;
+        color: #d92329;
       }
 
       span {

@@ -1,20 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { openNotification } from "../../util/notification";
-import productService from "./productService";
+import blogService from "./blogService";
 
 const userLogin = JSON.parse(localStorage.getItem('admin'))
 const initialState = {
-    products: [],
-    product: [],
+    blogs: [],
+    blog: [],
     message: '',
     isSuccess: false,
     isError: false
 }
 
-export const createProduct = createAsyncThunk('product/create',async (productData, thunkAPI) => {
+export const createBlog = createAsyncThunk('blog/create',async (blogData, thunkAPI) => {
     try {
         const token = userLogin.accessToken;
-        const response = await productService.createProduct(productData, token)
+        const response = await blogService.createBlog(blogData, token)
         if (response.success) {
           openNotification("success", "Success", response.message);
           return response;
@@ -32,10 +32,10 @@ export const createProduct = createAsyncThunk('product/create',async (productDat
       return thunkAPI.rejectWithValue(message)
     }
 })
-export const updateProduct = createAsyncThunk('product/update', async (productData,thunkAPI) => {
+export const updateBlog = createAsyncThunk('blog/update', async (blogData,thunkAPI) => {
   try {
     const token = userLogin.accessToken;
-    const response = await productService.updateProduct(productData, token, productData.params.id)
+    const response = await blogService.updateBlog(blogData, token, blogData.params.id)
     if (response) {
       openNotification('success', 'Success', response.message)
       return response
@@ -53,12 +53,12 @@ export const updateProduct = createAsyncThunk('product/update', async (productDa
   return thunkAPI.rejectWithValue(message)
   }
 })
-export const getProduct = createAsyncThunk(
-    'product/getAllProduct',
+export const getBlog = createAsyncThunk(
+    'blog/getAllBlog',
     async (_, thunkAPI) => {
       try {
         const token = userLogin.accessToken;
-        return await productService.getProduct(token)
+        return await blogService.getBlog(token)
       } catch (error) {
         const message =
           (error.response &&
@@ -70,12 +70,12 @@ export const getProduct = createAsyncThunk(
       }
     }
   )
-  export const getProductById = createAsyncThunk(
-    'product/getProductById',
+  export const getBlogById = createAsyncThunk(
+    'product/getBlogById',
     async (id, thunkAPI) => {
       try {
         const token = userLogin.accessToken;
-        return await productService.getProductById(id,token)
+        return await blogService.getBlogById(id,token)
       } catch (error) {
         const message =
           (error.response &&
@@ -87,12 +87,12 @@ export const getProduct = createAsyncThunk(
       }
     }
   )
-  export const deleteProduct = createAsyncThunk(
-    "product/delete",
+  export const deleteBlog = createAsyncThunk(
+    "blog/delete",
     async (id, thunkAPI) => {
       try {
         const token = userLogin.accessToken;
-        const response = await productService.deleteProduct(id, token);
+        const response = await blogService.deleteBlog(id, token);
         if (response.success) {
           openNotification("success", "Success", response.message);
           return response;
@@ -111,88 +111,88 @@ export const getProduct = createAsyncThunk(
     }
   );
 
-  export const productSlice = createSlice({
-    name: 'product',
+  export const blogSlice = createSlice({
+    name: 'blog',
     initialState,
     reducers: {
       reset: (state) => initialState,
     },
     extraReducers: (builder) => {
       builder
-        .addCase(createProduct.pending, (state) => {
+        .addCase(createBlog.pending, (state) => {
           state.isLoading = true
         })
-        .addCase(createProduct.fulfilled, (state, action) => {
+        .addCase(createBlog.fulfilled, (state, action) => {
           state.isLoading = false
           state.isSuccess = true
-          state.products =action.payload
+          state.blogs =action.payload
         })
-        .addCase(createProduct.rejected, (state, action) => {
+        .addCase(createBlog.rejected, (state, action) => {
           state.isLoading = false
           state.isError = true
           state.message = action.payload
-          state.products = null
+          state.blogs = null
         })
-        .addCase(getProduct.pending, (state) => {
+        .addCase(getBlog.pending, (state) => {
           state.isLoading = true
         })
-        .addCase(getProduct.fulfilled, (state, action) => {
+        .addCase(getBlog.fulfilled, (state, action) => {
           state.isLoading = false
           state.isSuccess = true
-          state.products = action.payload
+          state.blogs = action.payload
         })
-        .addCase(getProduct.rejected, (state, action) => {
+        .addCase(getBlog.rejected, (state, action) => {
           state.isLoading = false
           state.isError = true
           state.message = action.payload
-          state.products = null
+          state.blogs = null
 
-        }).addCase(getProductById.pending, (state) => {
+        }).addCase(getBlogById.pending, (state) => {
           state.isLoading = true
         })
-        .addCase(getProductById.fulfilled, (state, action) => {
+        .addCase(getBlogById.fulfilled, (state, action) => {
           state.isLoading = false
           state.isSuccess = true
-          state.product = action.payload
+          state.blog = action.payload
         })
-        .addCase(getProductById.rejected, (state, action) => {
+        .addCase(getBlogById.rejected, (state, action) => {
           state.isLoading = false
           state.isError = true
           state.message = action.payload
-          state.product = null
-
-        })
-        .addCase(updateProduct.pending, (state) => {
-          state.isLoading = true
-        })
-        .addCase(updateProduct.fulfilled, (state, action) => {
-          state.isLoading = false
-          state.isSuccess = true
-          state.products = action.payload
-        })
-        .addCase(updateProduct.rejected, (state, action) => {
-          state.isLoading = false
-          state.isError = true
-          state.message = action.payload
-          state.products = null
+          state.blog = null
 
         })
-        .addCase(deleteProduct.pending, (state) => {
+        .addCase(updateBlog.pending, (state) => {
           state.isLoading = true
         })
-        .addCase(deleteProduct.fulfilled, (state, action) => {
+        .addCase(updateBlog.fulfilled, (state, action) => {
           state.isLoading = false
           state.isSuccess = true
-          state.products = action.payload
+          state.blogs = action.payload
         })
-        .addCase(deleteProduct.rejected, (state, action) => {
+        .addCase(updateBlog.rejected, (state, action) => {
           state.isLoading = false
           state.isError = true
           state.message = action.payload
-          state.products = null
+          state.blogs = null
+
+        })
+        .addCase(deleteBlog.pending, (state) => {
+          state.isLoading = true
+        })
+        .addCase(deleteBlog.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          state.blogs = action.payload
+        })
+        .addCase(deleteBlog.rejected, (state, action) => {
+          state.isLoading = false
+          state.isError = true
+          state.message = action.payload
+          state.blogs = null
         })
     },
   })
   
-  export const { reset } = productSlice.actions
-  export default productSlice.reducer
+  export const { reset } = blogSlice.actions
+  export default blogSlice.reducer

@@ -3,8 +3,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Icon from "../../components/Icon/Icon";
 import { SiGmail } from "react-icons/si";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form } from "antd";
+import { login } from "../../features/Auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { openNotification } from "../../util/notification";
 
 const Login = () => {
   const FacebookBackground =
@@ -17,16 +20,32 @@ const Login = () => {
     "linear-gradient(to right, #4285F4 , #BB001B , #EA4335 , #FBBC05 , #34A853 )";
 
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isSuccess, message } = useSelector((state) => state.auth);
+
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     navigate("/")
+  //     openNotification("success", "Success", message)
+  //    }
+  // }, [isSuccess]);
 
   const onFinish = (e) => {
-    // const userData = {
-    //   email,
-    //   password,
-    // };
+    const userData = {
+      username,
+      password,
+    };
 
-    // dispatch(login(userData));
-    // history.push("/project");
-    console.log("dsdsds", username);
+    dispatch(login(userData));
+    if (isSuccess) {
+      navigate("/")
+      openNotification("success", "Success", message)
+     }
+     
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -35,7 +54,7 @@ const Login = () => {
   return (
     <MainContainer>
       <MainBox>
-        <WelcomeText>Welcome</WelcomeText>
+        <WelcomeText>Đăng Nhập Tài Khoản</WelcomeText>
         <Form
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -89,7 +108,12 @@ const Login = () => {
             ]}
           >
             <InputContainer>
-              <StyledInput type="password" placeholder="Mật Khẩu" />
+              <StyledInput
+                type="password"
+                placeholder="Mật Khẩu"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </InputContainer>
           </Form.Item>
           <Form.Item>

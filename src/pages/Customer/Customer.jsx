@@ -5,6 +5,13 @@ import SideBar from "../../components/SideBar/SideBar";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import "antd/dist/antd.css";
+import CreateCustomer from "./Modal/CreateCustomer";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  deleteCustomer,
+  getCustomer,
+} from "../../features/Customer/customerSlice";
 
 const data = [
   {
@@ -32,10 +39,26 @@ const data = [
     address: "London No. 2 Lake Park",
   },
 ];
-const User = () => {
+const Customer = () => {
+  const dispatch = useDispatch();
+
+  const { customers } = useSelector((state) => state.customer);
+
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  const [allData, setAllData] = useState();
+
+  useEffect(() => {
+    dispatch(getCustomer());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!customers) return;
+    setAllData(customers.customers);
+  }, [customers]);
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -138,24 +161,64 @@ const User = () => {
   });
   const columns = [
     {
-      title: "Name",
+      title: "Tên Khách Hàng",
       dataIndex: "name",
       key: "name",
       ...getColumnSearchProps("name"),
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
-      ...getColumnSearchProps("age"),
+      title: "Giới Tính",
+      dataIndex: "gender",
+      key: "gender",
+      ...getColumnSearchProps("gender"),
     },
     {
-      title: "Address",
+      title: "Địa Chỉ",
       dataIndex: "address",
       key: "address",
       ...getColumnSearchProps("address"),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "Điện Thoại",
+      dataIndex: "phone",
+      key: "phone",
+      ...getColumnSearchProps("phone"),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      ...getColumnSearchProps("email"),
+    },
+    // {
+    //   title: "Số Lần Mua Hàng",
+    //   dataIndex: "numberOfPurchase",
+    //   key: "numberOfPurchase",
+    //   ...getColumnSearchProps("numberOfPurchase"),
+    // },
+    {
+      title: "Loại Khách Hàng",
+      dataIndex: "customerType",
+      key: "customerType",
+      ...getColumnSearchProps("customerType"),
+    },
+    {
+      title: "Action",
+      dataIndex: "",
+      render: (_, record) => (
+        <Space size="middle">
+          {/* <EditProduct data={record._id}/> */}
+          <Button
+            type="primary"
+            onClick={() => {
+              dispatch(deleteCustomer(record._id));
+              dispatch(getCustomer());
+            }}
+          >
+            Xóa
+          </Button>
+        </Space>
+      ),
     },
   ];
   return (
@@ -163,23 +226,24 @@ const User = () => {
       <SideBar />
       <div style={{ flex: 6 }}>
         <Navbar />
-
-        {/* <Widget type="user"/>
-          <Widget type="order"/> */}
         <Row span={24}>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
-            User
+            <p style={{ fontSize: 18, fontWeight: 700, padding: 24 }}>
+              Khách Hàng
+            </p>
           </Col>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
-            <Button>Add New User</Button>
+            <CreateCustomer />
           </Col>
         </Row>
         <Row span={24}>
-          <Table columns={columns} dataSource={data} />
+          <Col xs={2} sm={4} md={6} lg={8} xl={24}>
+            <Table columns={columns} dataSource={allData} />
+          </Col>
         </Row>
       </div>
     </div>
   );
 };
 
-export default User;
+export default Customer;
