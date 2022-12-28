@@ -19,7 +19,7 @@ const Product = () => {
   const [allProduct, setAllProduct] = useState();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { products } = useSelector((state) => state.product);
 
@@ -141,15 +141,21 @@ const Product = () => {
     },
     {
       title: "Loại Sản Phẩm",
-      dataIndex: "type",
-      key: "type",
-      ...getColumnSearchProps("type"),
+      dataIndex: "category",
+      key: "category",
+      ...getColumnSearchProps("category"),
+    },
+    {
+      title: "Mô Tả Ngắn",
+      dataIndex: "shortDescription",
+      key: "shortDescription",
+      ...getColumnSearchProps("shortDescription"),
     },
     {
       title: "Mô Tả",
-      dataIndex: "description",
-      key: "description",
-      ...getColumnSearchProps("description"),
+      dataIndex: "fullDescription",
+      key: "fullDescription",
+      ...getColumnSearchProps("fullDescription"),
     },
     {
       title: "Hình ảnh",
@@ -159,10 +165,16 @@ const Product = () => {
     },
     {
       title: "Số Lượng",
-      dataIndex: "quantity",
-      key: "quantity",
-      ...getColumnSearchProps("quantity"),
+      dataIndex: "stock",
+      key: "stock",
+      ...getColumnSearchProps("stock"),
     },
+    // {
+    //   title: "Phân Loại",
+    //   dataIndex: "variation",
+    //   key: "variation",
+    //   ...getColumnSearchProps("variation"),
+    // },
     {
       title: "Giá Nhập",
       dataIndex: "salePrice",
@@ -175,18 +187,13 @@ const Product = () => {
       key: "entryPrice",
       ...getColumnSearchProps("entryPrice"),
     },
-    {
-      title: "Người Thêm",
-      dataIndex: "adminId",
-      key: "adminId",
-      ...getColumnSearchProps("adminId"),
-    },
+
     {
       title: "Action",
       dataIndex: "",
       render: (_, record) => (
         <Space size="middle">
-          <EditProduct data={record._id}/>
+          <EditProduct data={record._id} />
           <Button
             type="primary"
             onClick={() => {
@@ -207,7 +214,7 @@ const Product = () => {
         <Navbar />
         <Row span={24}>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
-          <p style={{ fontSize: 18, fontWeight: 700, padding: 24 }}>
+            <p style={{ fontSize: 18, fontWeight: 700, padding: 24 }}>
               Sản Phẩm
             </p>
           </Col>

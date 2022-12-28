@@ -1,27 +1,42 @@
-import styled from "styled-components";
-import React, { useState, useEffect } from "react";
-import { Modal, Form, Button, Input, Select, Col, Row, Avatar } from "antd";
+import React, { useState } from "react";
+import {
+  Modal,
+  Form,
+  Button,
+  Input,
+  Select,
+  Col,
+  Row,
+  Switch,
+  Card,
+} from "antd";
 import { Editor } from "@tinymce/tinymce-react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   createProduct,
   getProduct,
 } from "../../../features/Product/productSlice";
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const CreateProduct = () => {
   const dispatch = useDispatch();
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  const [category, setCategory] = useState([]);
+  const [discount, setDiscount] = useState("");
   const [salePrice, setSalePrice] = useState("");
   const [entryPrice, setEntryPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [adminId, setAdminId] = useState("");
-  const [quantity, setQuantity] = useState(0);
-  const [image, setImage] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
+  const [fullDescription, setFullDescription] = useState("");
+  const [tag, setTag] = useState([]);
+  const [stock, setStock] = useState(0);
+  const [image, setImage] = useState([]);
+  const [latestProduct, setLatestProduct] = useState(false);
+  const [size, setSize] = useState([]);
+  const [smell, setSmell] = useState([]);
 
   const [form] = Form.useForm();
 
@@ -31,19 +46,45 @@ const CreateProduct = () => {
     { name: "Nhóm Tăng Cân", value: "weightgain" },
     { name: "Nhóm Amino Axit, Creatin", value: "aminoaxit" },
     { name: "Nhóm Vitamin Và Khoáng Chất", value: "vitamin" },
-    { name: "Nhoms Phụ Kiện", value: "accessory" },
+    { name: "Nhóm Phụ Kiện", value: "accessory" },
   ];
 
   const handleClick = () => {
+    // const sizes = size.split(",").map((item) => {
+    //   return { size: item };
+    // });
+    // const smells = smell.split(",").map((item) => {
+    //   return {
+    //     name: item,
+    //     stock: stock,
+    //   };
+    // });
+
+    const variations = smell.split(",").map((item) => {
+      return {
+        smell: item,
+        size: size.split(",").map((item) => {
+          return {
+            name: item,
+            stock: stock,
+          };
+        }),
+      };
+    });
+
+    console.log(variations, "variations");
     const data = {
       name,
-      type,
-      description,
+      category,
+      shortDescription,
+      fullDescription,
       salePrice,
       entryPrice,
-      quantity,
-      adminId,
-      image,
+      stock,
+      tag,
+      variation: variations,
+      image: image.split(","),
+      latestProduct,
     };
     dispatch(createProduct(data));
     dispatch(getProduct());
@@ -80,7 +121,7 @@ const CreateProduct = () => {
           autoComplete="off"
         >
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item
                 label="Tên Sản Phẩm"
                 name="name"
@@ -93,10 +134,12 @@ const CreateProduct = () => {
                 />
               </Form.Item>
             </Col>
+          </Row>
+          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={12}>
               <Form.Item
                 label="Loại Sản Phẩm"
-                name="type"
+                name="category"
                 rules={[
                   {
                     required: true,
@@ -104,9 +147,9 @@ const CreateProduct = () => {
                 ]}
               >
                 <Select
-                  name="type"
-                  value={type}
-                  onChange={(e) => setType(e)}
+                  name="category"
+                  value={category}
+                  onChange={(e) => setCategory(e)}
                   style={{
                     float: "left",
                     width: "100%",
@@ -118,49 +161,10 @@ const CreateProduct = () => {
                 </Select>
               </Form.Item>
             </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
+            <Col span={12}>
               <Form.Item
-                label="Mô tả"
-                name="descriptionProduct"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Editor
-                  name="descriptionProduct"
-                  init={{
-                    height: 150,
-                    menubar: false,
-                    plugins: [
-                      "advlist autolink lists link image charmap print preview anchor",
-                      "searchreplace visualblocks code fullscreen",
-                      "insertdatetime media table paste code help wordcount",
-                    ],
-                    toolbar:
-                      "undo redo | formatselect | " +
-                      "bold italic backcolor | alignleft aligncenter " +
-                      "alignright alignjustify | bullist numlist outdent indent | " +
-                      "removeformat | help",
-                    content_style:
-                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                  }}
-                  value={description}
-                  onEditorChange={(content) => {
-                    setDescription(content);
-                  }}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-            <Col span={24}>
-              <Form.Item
-                label="Hình ảnh"
-                name="image"
+                label="Số Lượng"
+                name="stock"
                 rules={[
                   {
                     required: true,
@@ -169,8 +173,8 @@ const CreateProduct = () => {
               >
                 <Input
                   name="text"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
+                  value={stock}
+                  onChange={(e) => setStock(e.target.value)}
                 />
               </Form.Item>
             </Col>
@@ -214,8 +218,20 @@ const CreateProduct = () => {
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={12}>
               <Form.Item
-                label="Số Lượng"
-                name="quantity"
+                label="Sản Phẩm Mới"
+                name="latestProduct"
+                rules={[{ required: true }]}
+              >
+                <Switch
+                  checked={latestProduct}
+                  onChange={() => setLatestProduct(!latestProduct)}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Giảm Giá"
+                name="discount"
                 rules={[
                   {
                     required: true,
@@ -224,37 +240,147 @@ const CreateProduct = () => {
               >
                 <Input
                   name="text"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
+                  value={discount}
+                  onChange={(e) => setDiscount(e.target.value)}
                 />
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Người Thêm"
-                name="adminId"
-                // rules={[
-                //   {
-                //     required: true,
-                //   },
-                // ]}
-              >
-                <Select
-                  name="adminId"
-                  value={adminId}
-                  onChange={(e) => setAdminId(e)}
-                  style={{
-                    float: "left",
-                    width: "100%",
-                  }}
+          </Row>
+          <div style={{ border: "1px solid #dcdcdc", padding: "12px 24px" }}>
+            <p style={{ fontWeight: "bold", fontSize: 16 }}>
+              <span style={{ color: "red", paddingRight: 5 }}>*</span>Phân Loại
+            </p>
+            <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+              <Col span={12}>
+                <Form.Item
+                  label="Kích Thước"
+                  name="size"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
-                  {typeProduct.map((item, index) => {
-                    return <Option value={item.value}>{item.name}</Option>;
-                  })}
-                </Select>
+                  <TextArea
+                    rows={4}
+                    value={size}
+                    onChange={(e) => setSize(e.target.value)}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Hương Vị"
+                  name="smell"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <TextArea
+                    rows={4}
+                    value={smell}
+                    onChange={(e) => setSmell(e.target.value)}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </div>
+          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+            <Col span={24}>
+              <Form.Item
+                label="Hình ảnh"
+                name="image"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <TextArea
+                  rows={4}
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                />
               </Form.Item>
             </Col>
           </Row>
+          <Row>
+            <Col span={24}>
+              <Form.Item
+                label="Mô tả ngắn"
+                name="shortDescriptionProduct"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Editor
+                  name="shortDescriptionProduct"
+                  init={{
+                    height: 150,
+                    menubar: false,
+                    plugins: [
+                      "advlist autolink lists link image charmap print preview anchor",
+                      "searchreplace visualblocks code fullscreen",
+                      "insertdatetime media table paste code help wordcount",
+                    ],
+                    toolbar:
+                      "undo redo | formatselect | " +
+                      "bold italic backcolor | alignleft aligncenter " +
+                      "alignright alignjustify | bullist numlist outdent indent | " +
+                      "removeformat | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                  }}
+                  value={shortDescription}
+                  onEditorChange={(content) => {
+                    setShortDescription(content);
+                  }}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <Form.Item
+                label="Mô tả"
+                name="fullDescriptionProduct"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Editor
+                  name="fullDescriptionProduct"
+                  init={{
+                    height: 150,
+                    menubar: false,
+                    plugins: [
+                      "advlist autolink lists link image charmap print preview anchor",
+                      "searchreplace visualblocks code fullscreen",
+                      "insertdatetime media table paste code help wordcount",
+                    ],
+                    toolbar:
+                      "undo redo | formatselect | " +
+                      "bold italic backcolor | alignleft aligncenter " +
+                      "alignright alignjustify | bullist numlist outdent indent | " +
+                      "removeformat | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                  }}
+                  value={fullDescription}
+                  onEditorChange={(content) => {
+                    setFullDescription(content);
+                  }}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
           <Button
             key="submit"
             type="primary"

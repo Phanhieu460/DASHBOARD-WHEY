@@ -10,6 +10,7 @@ const register = async (adminData) => {
 }
 
 const login = async (adminData) => {
+    console.log(adminData);
     const response = await axios.post(`http://localhost:4000/api/admin/login`, adminData)
 
     if (response.data) {

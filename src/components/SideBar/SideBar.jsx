@@ -25,13 +25,13 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../features/Auth/authSlice";
 
 const SideBar = () => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logout())
-    navigate("/login")
-  }
+    dispatch(logout());
+    navigate("/login");
+  };
   return (
     <Container>
       <Top>
@@ -79,10 +79,10 @@ const SideBar = () => {
             <span>Hồ Sơ</span>
           </li>
           {/* <Link to="/login" style={{ textDecoration: "none" }}> */}
-            <li onClick={handleLogout}>
-              <ExitToAppIcon className="icon" />
-              <span>Đăng Xuất</span>
-            </li>
+          <li onClick={handleLogout}>
+            <ExitToAppIcon className="icon" />
+            <span>Đăng Xuất</span>
+          </li>
           {/* </Link> */}
         </ul>
       </Center>
