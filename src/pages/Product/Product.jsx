@@ -13,6 +13,10 @@ import EditProduct from "./Modal/EditProduct";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Product = () => {
+  const [show, setShow] = useState(false);
+  const [dataEdit, setDataEdit] = useState(0);
+  const closeModal = () => setShow(false);
+
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -31,6 +35,19 @@ const Product = () => {
     if (!products) return;
     setAllProduct(products.products);
   }, [products]);
+
+  const onDelete = (id) => {
+    if (window.confirm("Bạn có chắc muốn xóa sản phẩm này ?")) {
+      dispatch(deleteProduct(id));
+      dispatch(getProduct());
+    }
+  };
+
+  const onUpdate = (data) => {
+    console.log("zzz", data);
+    setShow(true);
+    setDataEdit(data);
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -149,24 +166,31 @@ const Product = () => {
       title: "Mô Tả Ngắn",
       dataIndex: "shortDescription",
       key: "shortDescription",
+      width: 150,
+      ellipsis: true,
       ...getColumnSearchProps("shortDescription"),
     },
     {
       title: "Mô Tả",
       dataIndex: "fullDescription",
       key: "fullDescription",
+      width: 150,
+      ellipsis: true,
       ...getColumnSearchProps("fullDescription"),
     },
     {
       title: "Hình ảnh",
       dataIndex: "image",
       key: "image",
+      width: 150,
+      ellipsis: true,
       ...getColumnSearchProps("image"),
     },
     {
       title: "Số Lượng",
       dataIndex: "stock",
       key: "stock",
+      width: 100,
       ...getColumnSearchProps("stock"),
     },
     // {
@@ -179,12 +203,14 @@ const Product = () => {
       title: "Giá Nhập",
       dataIndex: "salePrice",
       key: "salePrice",
+      width: 100,
       ...getColumnSearchProps("salePrice"),
     },
     {
       title: "Giá Bán",
       dataIndex: "entryPrice",
       key: "entryPrice",
+      width: 100,
       ...getColumnSearchProps("entryPrice"),
     },
 
@@ -193,14 +219,10 @@ const Product = () => {
       dataIndex: "",
       render: (_, record) => (
         <Space size="middle">
-          <EditProduct data={record._id} />
-          <Button
-            type="primary"
-            onClick={() => {
-              dispatch(deleteProduct(record._id));
-              dispatch(getProduct());
-            }}
-          >
+          <Button type="primary" onClick={() => onUpdate(record._id)}>
+            Sửa
+          </Button>
+          <Button type="primary" danger onClick={() => onDelete(record._id)}>
             Xóa
           </Button>
         </Space>
@@ -228,6 +250,14 @@ const Product = () => {
           </Col>
         </Row>
       </div>
+      {show ? (
+        <EditProduct
+          open={show}
+          closeModal={closeModal}
+          title="Sửa thông tin sản phẩm"
+          dataEdit={dataEdit}
+        />
+      ) : null}
     </div>
   );
 };

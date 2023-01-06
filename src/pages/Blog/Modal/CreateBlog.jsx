@@ -13,10 +13,7 @@ import {
 } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createBlog,
-  getBlog,
-} from "../../../features/Blog/blogSlice";
+import { createBlog, getBlog } from "../../../features/Blog/blogSlice";
 
 const { Option } = Select;
 
@@ -36,7 +33,7 @@ const CreateBlog = () => {
       name,
       description,
       image,
-      writer
+      writer,
     };
     dispatch(createBlog(data));
     dispatch(getBlog());
@@ -148,8 +145,8 @@ const CreateBlog = () => {
           </Row>
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={24}>
-            <Form.Item
-                label="Người viét"
+              <Form.Item
+                label="Người viết"
                 name="writer"
                 // rules={[
                 //   {
@@ -162,19 +159,36 @@ const CreateBlog = () => {
                   value={writer}
                   onChange={(e) => setWriter(e.target.value)}
                 />
-              </Form.Item></Col>
+              </Form.Item>
+            </Col>
           </Row>
-          <Button
-            key="submit"
-            type="primary"
-            // disabled={title && issueType && status ? false : true}
-            onClick={handleClick}
-          >
-            Thêm
-          </Button>
-          <Button key="back" onClick={() => setIsOpenModal(false)}>
-            Hủy Bỏ
-          </Button>
+          <Row>
+            <Col
+              span={24}
+              style={{
+                textAlign: "right",
+              }}
+            >
+              <Button
+                key="submit"
+                type="primary"
+                htmlType="submit"
+                // disabled={name ? false : true}
+                onClick={handleClick}
+              >
+                Thêm
+              </Button>
+              <Button
+                key="back"
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={() => setIsOpenModal(false)}
+              >
+                Hủy Bỏ
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </div>

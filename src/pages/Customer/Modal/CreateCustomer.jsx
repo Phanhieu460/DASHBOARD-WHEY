@@ -194,17 +194,34 @@ const CreateCustomer = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Button
-            key="submit"
-            type="primary"
-            // disabled={title && issueType && status ? false : true}
-            onClick={handleClick}
-          >
-            Thêm
-          </Button>
-          <Button key="back" onClick={() => setIsOpenModal(false)}>
-            Hủy Bỏ
-          </Button>
+
+          <Row>
+            <Col
+              span={24}
+              style={{
+                textAlign: "right",
+              }}
+            >
+              <Button
+                key="submit"
+                type="primary"
+                htmlType="submit"
+                // disabled={name ? false : true}
+                onClick={handleClick}
+              >
+                Thêm
+              </Button>
+              <Button
+                key="back"
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={() => setIsOpenModal(false)}
+              >
+                Hủy Bỏ
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </div>

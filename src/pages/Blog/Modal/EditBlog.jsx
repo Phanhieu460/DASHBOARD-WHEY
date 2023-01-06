@@ -3,18 +3,21 @@ import React, { useState, useEffect } from "react";
 import { Modal, Form, Button, Input, Select, Col, Row, Avatar } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDispatch, useSelector } from "react-redux";
-import { createBlog, getBlog, getBlogById } from "../../../features/Blog/blogSlice";
+import {
+  createBlog,
+  getBlog,
+  getBlogById,
+} from "../../../features/Blog/blogSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateBlog } from "../../../features/Blog/blogSlice";
 
 const { Option } = Select;
 
-const EditBlog = () => {
-const params = useParams()
-  
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+const EditBlog = (props) => {
+  const params = useParams();
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [name, setName] = useState("");
@@ -22,7 +25,7 @@ const params = useParams()
   const [image, setImage] = useState("");
   const [writer, setWriter] = useState("");
 
-  const {blog} = useSelector(state => state.blog)
+  const { blog } = useSelector((state) => state.blog);
 
   const [form] = Form.useForm();
 
@@ -30,27 +33,26 @@ const params = useParams()
   //   dispatch(getBlogById(params.id))
   // }, [blog])
 
-  const handleClick = () =>{
+  const handleClick = () => {
     const data = {
       name,
       description,
       image,
-      writer
-      };
-      dispatch(updateBlog(data))
-    dispatch(getBlog())
-      setIsOpenModal(false);
-      form.resetFields();
-  }
+      writer,
+    };
+    dispatch(updateBlog(data));
+    dispatch(getBlog());
+    setIsOpenModal(false);
+    form.resetFields();
+  };
   return (
     <div>
-      <Button onClick={() => setIsOpenModal(true)}>Sửa</Button>
       <Modal
         style={{ top: "50px" }}
         width={700}
         title="Kiến Thức"
-        visible={isOpenModal}
-        onCancel={() => setIsOpenModal(false)}
+        visible={props.open}
+        onCancel={props.closeModal}
         footer={false}
       >
         <Form
@@ -165,17 +167,33 @@ const params = useParams()
                 </Select>
               </Form.Item></Col>
           </Row> */}
-          <Button
-            key="submit"
-            type="primary"
-            // disabled={title && issueType && status ? false : true}
-            onClick={handleClick}
-          >
-            Thêm
-          </Button>
-          <Button key="back" onClick={() => setIsOpenModal(false)}>
-            Hủy Bỏ
-          </Button>
+          <Row>
+            <Col
+              span={24}
+              style={{
+                textAlign: "right",
+              }}
+            >
+              <Button
+                key="submit"
+                type="primary"
+                htmlType="submit"
+                // disabled={name ? false : true}
+                onClick={handleClick}
+              >
+                Sửa
+              </Button>
+              <Button
+                key="back"
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={props.closeModal}
+              >
+                Hủy Bỏ
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </div>

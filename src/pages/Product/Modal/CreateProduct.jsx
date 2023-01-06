@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  Form,
-  Button,
-  Input,
-  Select,
-  Col,
-  Row,
-  Switch,
-  Card,
-} from "antd";
+import { Modal, Form, Button, Input, Select, Col, Row, Switch } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDispatch } from "react-redux";
 import {
@@ -49,30 +39,23 @@ const CreateProduct = () => {
     { name: "Nhóm Phụ Kiện", value: "accessory" },
   ];
 
-  const handleClick = () => {
-    // const sizes = size.split(",").map((item) => {
-    //   return { size: item };
-    // });
-    // const smells = smell.split(",").map((item) => {
-    //   return {
-    //     name: item,
-    //     stock: stock,
-    //   };
-    // });
+  const handleClick = async () => {
+    const variations =
+      smell.length > 0 &&
+      smell?.split(",").map((item) => {
+        return {
+          smell: item,
+          size:
+            size.length > 0 &&
+            size.split(",").map((item) => {
+              return {
+                name: item,
+                stock: stock,
+              };
+            }),
+        };
+      });
 
-    const variations = smell.split(",").map((item) => {
-      return {
-        smell: item,
-        size: size.split(",").map((item) => {
-          return {
-            name: item,
-            stock: stock,
-          };
-        }),
-      };
-    });
-
-    console.log(variations, "variations");
     const data = {
       name,
       category,
@@ -86,6 +69,7 @@ const CreateProduct = () => {
       image: image.split(","),
       latestProduct,
     };
+    await form.validateFields();
     dispatch(createProduct(data));
     dispatch(getProduct());
     setIsOpenModal(false);
@@ -125,7 +109,9 @@ const CreateProduct = () => {
               <Form.Item
                 label="Tên Sản Phẩm"
                 name="name"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng không bỏ trống ô này!" },
+                ]}
               >
                 <Input
                   name="name"
@@ -143,6 +129,7 @@ const CreateProduct = () => {
                 rules={[
                   {
                     required: true,
+                    message: "Vui lòng không bỏ trống ô này!",
                   },
                 ]}
               >
@@ -168,6 +155,7 @@ const CreateProduct = () => {
                 rules={[
                   {
                     required: true,
+                    message: "Vui lòng không bỏ trống ô này!",
                   },
                 ]}
               >
@@ -187,6 +175,7 @@ const CreateProduct = () => {
                 rules={[
                   {
                     required: true,
+                    message: "Vui lòng không bỏ trống ô này!",
                   },
                 ]}
               >
@@ -204,6 +193,7 @@ const CreateProduct = () => {
                 rules={[
                   {
                     required: true,
+                    message: "Vui lòng không bỏ trống ô này!",
                   },
                 ]}
               >
@@ -217,11 +207,7 @@ const CreateProduct = () => {
           </Row>
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={12}>
-              <Form.Item
-                label="Sản Phẩm Mới"
-                name="latestProduct"
-                rules={[{ required: true }]}
-              >
+              <Form.Item label="Sản Phẩm Mới" name="latestProduct">
                 <Switch
                   checked={latestProduct}
                   onChange={() => setLatestProduct(!latestProduct)}
@@ -229,15 +215,7 @@ const CreateProduct = () => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                label="Giảm Giá"
-                name="discount"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="Giảm Giá" name="discount">
                 <Input
                   name="text"
                   value={discount}
@@ -252,15 +230,7 @@ const CreateProduct = () => {
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col span={12}>
-                <Form.Item
-                  label="Kích Thước"
-                  name="size"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Kích Thước" name="size">
                   <TextArea
                     rows={4}
                     value={size}
@@ -269,15 +239,7 @@ const CreateProduct = () => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label="Hương Vị"
-                  name="smell"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Hương Vị" name="smell">
                   <TextArea
                     rows={4}
                     value={smell}
@@ -295,6 +257,7 @@ const CreateProduct = () => {
                 rules={[
                   {
                     required: true,
+                    message: "Vui lòng không bỏ trống ô này!",
                   },
                 ]}
               >
@@ -308,15 +271,7 @@ const CreateProduct = () => {
           </Row>
           <Row>
             <Col span={24}>
-              <Form.Item
-                label="Mô tả ngắn"
-                name="shortDescriptionProduct"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="Mô tả ngắn" name="shortDescriptionProduct">
                 <Editor
                   name="shortDescriptionProduct"
                   init={{
@@ -351,6 +306,7 @@ const CreateProduct = () => {
                 rules={[
                   {
                     required: true,
+                    message: "Vui lòng không bỏ trống ô này!",
                   },
                 ]}
               >
@@ -380,18 +336,33 @@ const CreateProduct = () => {
               </Form.Item>
             </Col>
           </Row>
-
-          <Button
-            key="submit"
-            type="primary"
-            // disabled={title && issueType && status ? false : true}
-            onClick={handleClick}
-          >
-            Thêm
-          </Button>
-          <Button key="back" onClick={() => setIsOpenModal(false)}>
-            Hủy Bỏ
-          </Button>
+          <Row>
+            <Col
+              span={24}
+              style={{
+                textAlign: "right",
+              }}
+            >
+              <Button
+                key="submit"
+                type="primary"
+                htmlType="submit"
+                disabled={name ? false : true}
+                onClick={handleClick}
+              >
+                Thêm
+              </Button>
+              <Button
+                key="back"
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={() => setIsOpenModal(false)}
+              >
+                Hủy Bỏ
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </div>

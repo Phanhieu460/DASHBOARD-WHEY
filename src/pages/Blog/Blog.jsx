@@ -8,13 +8,14 @@ import "antd/dist/antd.css";
 import CreateBlog from "./Modal/CreateBlog";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import {
-  deleteBlog,
-  getBlog,
-} from "../../features/Blog/blogSlice";
+import { deleteBlog, getBlog } from "../../features/Blog/blogSlice";
 import EditBlog from "./Modal/EditBlog";
 
 const Blog = () => {
+  const [show, setShow] = useState(false);
+  const [dataEdit, setDataEdit] = useState(0);
+  const closeModal = () => setShow(false);
+
   const dispatch = useDispatch();
 
   const { blogs } = useSelector((state) => state.blog);
@@ -33,6 +34,19 @@ const Blog = () => {
     if (!blogs) return;
     setAllData(blogs.blogs);
   }, [blogs]);
+
+  const onDelete = (id) => {
+    if (window.confirm("Bạn có chắc muốn xóa bài viết này ?")) {
+      dispatch(deleteBlog(id));
+      dispatch(getBlog());
+    }
+  };
+
+  const onUpdate = (data) => {
+    console.log("zzz", data);
+    setShow(true);
+    setDataEdit(data);
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -145,12 +159,16 @@ const Blog = () => {
       title: "Nội Dung",
       dataIndex: "description",
       key: "description",
+      width: 250,
+      ellipsis: true,
       ...getColumnSearchProps("description"),
     },
     {
       title: "Ảnh",
       dataIndex: "image",
       key: "image",
+      width: 250,
+      ellipsis: true,
       ...getColumnSearchProps("image"),
     },
     {
@@ -164,14 +182,10 @@ const Blog = () => {
       dataIndex: "",
       render: (_, record) => (
         <Space size="middle">
-          <EditBlog/>
-          <Button
-            type="primary"
-            onClick={() => {
-              dispatch(deleteBlog(record._id));
-              dispatch(getBlog());
-            }}
-          >
+          <Button type="primary" onClick={() => onUpdate(record._id)}>
+            Sửa
+          </Button>
+          <Button type="primary" danger onClick={() => onDelete(record._id)}>
             Xóa
           </Button>
         </Space>
@@ -199,6 +213,14 @@ const Blog = () => {
           </Col>
         </Row>
       </div>
+      {show ? (
+        <EditBlog
+          open={show}
+          closeModal={closeModal}
+          title="Sửa thông tin bài viết"
+          dataEdit={dataEdit}
+        />
+      ) : null}
     </div>
   );
 };

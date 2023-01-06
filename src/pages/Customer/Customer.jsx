@@ -12,34 +12,13 @@ import {
   deleteCustomer,
   getCustomer,
 } from "../../features/Customer/customerSlice";
+import EditCustomer from "./Modal/EditCustomer";
 
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park",
-  },
-];
 const Customer = () => {
+  const [show, setShow] = useState(false);
+  const [dataEdit, setDataEdit] = useState(0);
+  const closeModal = () => setShow(false);
+
   const dispatch = useDispatch();
 
   const { customers } = useSelector((state) => state.customer);
@@ -58,6 +37,18 @@ const Customer = () => {
     if (!customers) return;
     setAllData(customers.customers);
   }, [customers]);
+
+  const onDelete = (id) => {
+    if (window.confirm("Bạn có chắc muốn xóa khách hàng này ?")) {
+      dispatch(deleteCustomer(id));
+      dispatch(getCustomer());
+    }
+  };
+
+  const onUpdate = (data) => {
+    setShow(true);
+    setDataEdit(data);
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -190,12 +181,6 @@ const Customer = () => {
       key: "email",
       ...getColumnSearchProps("email"),
     },
-    // {
-    //   title: "Số Lần Mua Hàng",
-    //   dataIndex: "numberOfPurchase",
-    //   key: "numberOfPurchase",
-    //   ...getColumnSearchProps("numberOfPurchase"),
-    // },
     {
       title: "Loại Khách Hàng",
       dataIndex: "customerType",
@@ -207,14 +192,10 @@ const Customer = () => {
       dataIndex: "",
       render: (_, record) => (
         <Space size="middle">
-          {/* <EditProduct data={record._id}/> */}
-          <Button
-            type="primary"
-            onClick={() => {
-              dispatch(deleteCustomer(record._id));
-              dispatch(getCustomer());
-            }}
-          >
+          <Button type="primary" onClick={() => onUpdate(record._id)}>
+            Sửa
+          </Button>
+          <Button type="primary" danger onClick={() => onDelete(record._id)}>
             Xóa
           </Button>
         </Space>
@@ -242,6 +223,14 @@ const Customer = () => {
           </Col>
         </Row>
       </div>
+      {show ? (
+        <EditCustomer
+          open={show}
+          closeModal={closeModal}
+          title="Sửa thông tin khách hàng"
+          dataEdit={dataEdit}
+        />
+      ) : null}
     </div>
   );
 };

@@ -1,36 +1,38 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { Modal, Form, Button, Input, Select, Col, Row, Avatar } from "antd";
+import { Modal, Form, Button, Input, Select, Col, Row } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDispatch, useSelector } from "react-redux";
-import { createProduct, getProduct, getProductById } from "../../../features/Product/productSlice";
+import {
+  createProduct,
+  getProduct,
+  getProductById,
+} from "../../../features/Product/productSlice";
 import { useNavigate, useParams } from "react-router-dom";
 
 const { Option } = Select;
 
-const EditCustomer = ({data}) => {
-const params = useParams()
-  
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+const EditCustomer = (props) => {
+  const params = useParams();
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [isOpenModal, setIsOpenModal] = useState(false);
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [salePrice, setSalePrice] = useState("");
   const [entryPrice, setEntryPrice] = useState("");
   const [description, setDescription] = useState("");
   const [adminId, setAdminId] = useState("");
-  const [quantity, setQuantity] = useState(0)
+  const [quantity, setQuantity] = useState(0);
 
-  const {product} = useSelector(state => state.product)
+  const { product } = useSelector((state) => state.product);
 
   const [form] = Form.useForm();
 
   useEffect(() => {
-    dispatch(getProductById(params.id))
-  }, [product])
+    dispatch(getProductById(params.id));
+  }, [product]);
 
   const typeProduct = [
     { name: "Nhóm WheyProtein", value: "wheyprotein" },
@@ -41,31 +43,29 @@ const params = useParams()
     { name: "Nhoms Phụ Kiện", value: "accessory" },
   ];
 
-
-  const handleClick = () =>{
+  const handleClick = () => {
     const data = {
-        name,
-        type,
-        description,
-        salePrice,
-        entryPrice,
-        quantity,
-        adminId
-      };
-      dispatch(createProduct(data))
-    dispatch(getProduct)
-      setIsOpenModal(false);
-      form.resetFields();
-  }
+      name,
+      type,
+      description,
+      salePrice,
+      entryPrice,
+      quantity,
+      adminId,
+    };
+    dispatch(createProduct(data));
+    dispatch(getProduct);
+    props.closeModal();
+    form.resetFields();
+  };
   return (
     <div>
-      <Button onClick={() => setIsOpenModal(true)}>Sửa</Button>
       <Modal
         style={{ top: "50px" }}
         width={700}
         title="Sản Phẩm"
-        visible={isOpenModal}
-        onCancel={() => setIsOpenModal(false)}
+        visible={props.open}
+        onCancel={props.closeModal}
         footer={false}
       >
         <Form
@@ -188,7 +188,7 @@ const params = useParams()
             </Col>
           </Row>
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-          <Col span={12}>
+            <Col span={12}>
               <Form.Item
                 label="Số Lượng"
                 name="quantity"
@@ -205,43 +205,35 @@ const params = useParams()
                 />
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Người Thêm"
-                name="adminId"
-                // rules={[
-                //   {
-                //     required: true,
-                //   },
-                // ]}
+          </Row>
+
+          <Row>
+            <Col
+              span={24}
+              style={{
+                textAlign: "right",
+              }}
+            >
+              <Button
+                key="submit"
+                type="primary"
+                htmlType="submit"
+                disabled={name ? false : true}
+                onClick={handleClick}
               >
-                <Select
-                  name="adminId"
-                  value={adminId}
-                  onChange={(e) => setAdminId(e)}
-                  style={{
-                    float: "left",
-                    width: "100%",
-                  }}
-                >
-                  {typeProduct.map((item, index) => {
-                    return <Option value={item.value}>{item.name}</Option>;
-                  })}
-                </Select>
-              </Form.Item>
+                Sửa
+              </Button>
+              <Button
+                key="back"
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={props.closeModal}
+              >
+                Hủy Bỏ
+              </Button>
             </Col>
           </Row>
-          <Button
-            key="submit"
-            type="primary"
-            // disabled={title && issueType && status ? false : true}
-            onClick={handleClick}
-          >
-            Sửa
-          </Button>
-          <Button key="back" onClick={() => setIsOpenModal(false)}>
-            Hủy Bỏ
-          </Button>
         </Form>
       </Modal>
     </div>
