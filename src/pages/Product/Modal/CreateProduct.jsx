@@ -65,6 +65,7 @@ const CreateProduct = () => {
       entryPrice,
       stock,
       tag,
+      discount,
       variation: variations,
       image: image.split(","),
       latestProduct,

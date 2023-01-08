@@ -8,16 +8,12 @@ import {
   getBlog,
   getBlogById,
 } from "../../../features/Blog/blogSlice";
-import { useNavigate, useParams } from "react-router-dom";
 import { updateBlog } from "../../../features/Blog/blogSlice";
 
 const { Option } = Select;
 
 const EditBlog = (props) => {
-  const params = useParams();
-
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [name, setName] = useState("");

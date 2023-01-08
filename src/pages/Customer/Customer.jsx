@@ -1,7 +1,6 @@
 import { Button, Row, Col, Table, Input, Space } from "antd";
 import React, { useRef, useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import SideBar from "../../components/SideBar/SideBar";
+import Sidebar from "../../components/sidebar";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import "antd/dist/antd.css";
@@ -204,9 +203,8 @@ const Customer = () => {
   ];
   return (
     <div style={{ display: "flex" }}>
-      <SideBar />
+      <Sidebar />
       <div style={{ flex: 6 }}>
-        <Navbar />
         <Row span={24}>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
             <p style={{ fontSize: 18, fontWeight: 700, padding: 24 }}>

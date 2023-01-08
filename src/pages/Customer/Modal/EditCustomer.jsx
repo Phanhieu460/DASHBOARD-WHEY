@@ -8,15 +8,13 @@ import {
   getProduct,
   getProductById,
 } from "../../../features/Product/productSlice";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const { Option } = Select;
 
 const EditCustomer = (props) => {
   const params = useParams();
-
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [type, setType] = useState("");

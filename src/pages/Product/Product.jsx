@@ -1,7 +1,6 @@
 import { Button, Row, Col, Table, Input, Space } from "antd";
 import React, { useRef, useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import SideBar from "../../components/SideBar/SideBar";
+import Sidebar from "../../components/sidebar";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import "antd/dist/antd.css";
@@ -10,7 +9,8 @@ import { useEffect } from "react";
 import { deleteProduct, getProduct } from "../../features/Product/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import EditProduct from "./Modal/EditProduct";
-import { useLocation, useNavigate } from "react-router-dom";
+import Header from "../../components/Header";
+import { listProducts } from "../../Redux/Actions/ProductActions";
 
 const Product = () => {
   const [show, setShow] = useState(false);
@@ -23,18 +23,16 @@ const Product = () => {
   const [allProduct, setAllProduct] = useState();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const { products } = useSelector((state) => state.product);
+  const productList = useSelector((state) => state.productList);
+  const { loading, error, products } = productList;
+
+  const productDelete = useSelector((state) => state.productDelete);
+  const { error: errorDelete, success: successDelete } = productDelete;
 
   useEffect(() => {
-    dispatch(getProduct());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!products) return;
-    setAllProduct(products.products);
-  }, [products]);
+    dispatch(listProducts());
+  }, [dispatch, successDelete]);
 
   const onDelete = (id) => {
     if (window.confirm("Bạn có chắc muốn xóa sản phẩm này ?")) {
@@ -213,6 +211,13 @@ const Product = () => {
       width: 100,
       ...getColumnSearchProps("entryPrice"),
     },
+    {
+      title: "Giảm Giá",
+      dataIndex: "discount",
+      key: "discount",
+      width: 100,
+      ...getColumnSearchProps("discount"),
+    },
 
     {
       title: "Action",
@@ -230,10 +235,10 @@ const Product = () => {
     },
   ];
   return (
-    <div style={{ display: "flex" }}>
-      <SideBar />
-      <div style={{ flex: 6 }}>
-        <Navbar />
+    <>
+      <Sidebar />
+      <main className="main-wrap">
+        <Header />
         <Row span={24}>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
             <p style={{ fontSize: 18, fontWeight: 700, padding: 24 }}>
@@ -246,10 +251,10 @@ const Product = () => {
         </Row>
         <Row span={24}>
           <Col xs={2} sm={4} md={6} lg={8} xl={24}>
-            <Table columns={columns} dataSource={allProduct} />
+            <Table columns={columns} dataSource={products} />
           </Col>
         </Row>
-      </div>
+      </main>
       {show ? (
         <EditProduct
           open={show}
@@ -258,7 +263,7 @@ const Product = () => {
           dataEdit={dataEdit}
         />
       ) : null}
-    </div>
+    </>
   );
 };
 
