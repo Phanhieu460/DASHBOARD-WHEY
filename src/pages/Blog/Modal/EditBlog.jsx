@@ -3,12 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Modal, Form, Button, Input, Select, Col, Row, Avatar } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createBlog,
-  getBlog,
-  getBlogById,
-} from "../../../features/Blog/blogSlice";
-import { updateBlog } from "../../../features/Blog/blogSlice";
 
 const { Option } = Select;
 
@@ -21,13 +15,7 @@ const EditBlog = (props) => {
   const [image, setImage] = useState("");
   const [writer, setWriter] = useState("");
 
-  const { blog } = useSelector((state) => state.blog);
-
   const [form] = Form.useForm();
-
-  // useEffect(() => {
-  //   dispatch(getBlogById(params.id))
-  // }, [blog])
 
   const handleClick = () => {
     const data = {
@@ -36,8 +24,6 @@ const EditBlog = (props) => {
       image,
       writer,
     };
-    dispatch(updateBlog(data));
-    dispatch(getBlog());
     setIsOpenModal(false);
     form.resetFields();
   };

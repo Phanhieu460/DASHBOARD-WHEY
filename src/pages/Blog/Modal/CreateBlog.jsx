@@ -13,7 +13,6 @@ import {
 } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDispatch, useSelector } from "react-redux";
-import { createBlog, getBlog } from "../../../features/Blog/blogSlice";
 
 const { Option } = Select;
 
@@ -35,8 +34,7 @@ const CreateBlog = () => {
       image,
       writer,
     };
-    dispatch(createBlog(data));
-    dispatch(getBlog());
+
     setIsOpenModal(false);
     form.resetFields();
   };

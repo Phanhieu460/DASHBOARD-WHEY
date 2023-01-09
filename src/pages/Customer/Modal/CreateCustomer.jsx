@@ -13,10 +13,6 @@ import {
 } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createCustomer,
-  getCustomer,
-} from "../../../features/Customer/customerSlice";
 
 const { Option } = Select;
 
@@ -44,8 +40,7 @@ const CreateCustomer = () => {
       numberOfPurchase,
       customerType,
     };
-    dispatch(createCustomer(data));
-    dispatch(getCustomer());
+
     setIsOpenModal(false);
     form.resetFields();
   };

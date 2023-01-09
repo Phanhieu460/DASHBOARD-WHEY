@@ -3,48 +3,32 @@ import React, { useRef, useState } from "react";
 import Sidebar from "../../components/sidebar";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import "antd/dist/antd.css";
-import CreateBlog from "./Modal/CreateBlog";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { deleteBlog, getBlog } from "../../features/Blog/blogSlice";
-import EditBlog from "./Modal/EditBlog";
-
+import { Link, NavLink } from "react-router-dom";
+import Header from "../../components/Header";
+import { listBlogs, deleteBlog } from "../../Redux/Actions/BlogActions";
 const Blog = () => {
-  const [show, setShow] = useState(false);
-  const [dataEdit, setDataEdit] = useState(0);
-  const closeModal = () => setShow(false);
-
   const dispatch = useDispatch();
-
-  const { blogs } = useSelector((state) => state.blog);
 
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
 
-  const [allData, setAllData] = useState();
+  const blogList = useSelector((state) => state.blogList);
+  const { loading, error, blogs } = blogList;
+
+  const blogDelete = useSelector((state) => state.blogDelete);
+  const { error: errorDelete, success: successDelete } = blogDelete;
 
   useEffect(() => {
-    dispatch(getBlog());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!blogs) return;
-    setAllData(blogs.blogs);
-  }, [blogs]);
+    dispatch(listBlogs());
+  }, [dispatch, successDelete]);
 
   const onDelete = (id) => {
     if (window.confirm("Bạn có chắc muốn xóa bài viết này ?")) {
       dispatch(deleteBlog(id));
-      dispatch(getBlog());
     }
-  };
-
-  const onUpdate = (data) => {
-    console.log("zzz", data);
-    setShow(true);
-    setDataEdit(data);
   };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -181,8 +165,8 @@ const Blog = () => {
       dataIndex: "",
       render: (_, record) => (
         <Space size="middle">
-          <Button type="primary" onClick={() => onUpdate(record._id)}>
-            Sửa
+          <Button type="primary">
+            <Link to={`/blog/${record._id}/edit`}>Sửa</Link>
           </Button>
           <Button type="primary" danger onClick={() => onDelete(record._id)}>
             Xóa
@@ -192,9 +176,10 @@ const Blog = () => {
     },
   ];
   return (
-    <div style={{ display: "flex" }}>
+    <>
       <Sidebar />
-      <div style={{ flex: 6 }}>
+      <main className="main-wrap">
+        <Header />
         <Row span={24}>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
             <p style={{ fontSize: 18, fontWeight: 700, padding: 24 }}>
@@ -202,24 +187,34 @@ const Blog = () => {
             </p>
           </Col>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
-            <CreateBlog />
+            <div
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+                padding: 24,
+                float: "right",
+              }}
+            >
+              <Button>
+                <NavLink
+                  activeClassName="active"
+                  className="menu-link"
+                  to="/addblog"
+                >
+                  <i className="icon fas fa-cart-plus"></i>
+                  <span className="text">Thêm</span>
+                </NavLink>
+              </Button>
+            </div>
           </Col>
         </Row>
         <Row span={24}>
           <Col xs={2} sm={4} md={6} lg={8} xl={24}>
-            <Table columns={columns} dataSource={allData} />
+            <Table columns={columns} dataSource={blogs} />
           </Col>
         </Row>
-      </div>
-      {show ? (
-        <EditBlog
-          open={show}
-          closeModal={closeModal}
-          title="Sửa thông tin bài viết"
-          dataEdit={dataEdit}
-        />
-      ) : null}
-    </div>
+      </main>
+    </>
   );
 };
 

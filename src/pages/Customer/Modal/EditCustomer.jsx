@@ -3,11 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Form, Button, Input, Select, Col, Row } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createProduct,
-  getProduct,
-  getProductById,
-} from "../../../features/Product/productSlice";
+
 import { useParams } from "react-router-dom";
 
 const { Option } = Select;
@@ -24,13 +20,7 @@ const EditCustomer = (props) => {
   const [adminId, setAdminId] = useState("");
   const [quantity, setQuantity] = useState(0);
 
-  const { product } = useSelector((state) => state.product);
-
   const [form] = Form.useForm();
-
-  useEffect(() => {
-    dispatch(getProductById(params.id));
-  }, [product]);
 
   const typeProduct = [
     { name: "Nhóm WheyProtein", value: "wheyprotein" },
@@ -51,8 +41,7 @@ const EditCustomer = (props) => {
       quantity,
       adminId,
     };
-    dispatch(createProduct(data));
-    dispatch(getProduct);
+
     props.closeModal();
     form.resetFields();
   };

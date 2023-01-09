@@ -13,6 +13,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "./Redux/Actions/ProductActions";
 import { listOrders } from "./Redux/Actions/OrderActions";
 import { useEffect } from "react";
+import AddProduct from "./pages/Product/AddProduct";
+import ProductEditScreen from "./pages/Product/ProductEditScreen";
+import AddBlog from "./pages/Blog/AddBlog";
+import BlogEditScreen from "./pages/Blog/BlogEditScreen";
+import { listBlogs } from "./Redux/Actions/BlogActions";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +28,7 @@ function App() {
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listProducts());
+      dispatch(listBlogs());
       dispatch(listOrders());
     }
   }, [dispatch, userInfo]);
@@ -33,14 +39,18 @@ function App() {
           <PrivateRouter path="/" component={Home} exact />
           <PrivateRouter path="/products" component={Product} />
           <PrivateRouter path="/customers" component={Customer} />
+          <PrivateRouter path="/blog" component={Blog} />
+          <PrivateRouter path="/addproduct" component={AddProduct} />
+          <PrivateRouter path="/addblog" component={AddBlog} />
           {/* <PrivateRouter path="/orders" component={OrderScreen} />
         <PrivateRouter path="/order/:id" component={OrderDetailScreen} />
-        <PrivateRouter path="/addproduct" component={AddProduct} />
         <PrivateRouter path="/users" component={UsersScreen} />
-        <PrivateRouter
-          path="/product/:id/edit"
-          component={ProductEditScreen}
-        /> */}
+         */}
+          <PrivateRouter
+            path="/product/:id/edit"
+            component={ProductEditScreen}
+          />
+          <PrivateRouter path="/blog/:id/edit" component={BlogEditScreen} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           {/* <PrivateRouter path="*" component={NotFound} /> */}

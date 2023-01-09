@@ -48,16 +48,6 @@ const Sidebar = () => {
               <NavLink
                 activeClassName="active"
                 className="menu-link"
-                to="/addproduct"
-              >
-                <i className="icon fas fa-cart-plus"></i>
-                <span className="text">Add product</span>
-              </NavLink>
-            </li>
-            <li className="menu-item">
-              <NavLink
-                activeClassName="active"
-                className="menu-link"
                 to="/orders"
               >
                 <i className="icon fas fa-bags-shopping"></i>
@@ -77,7 +67,7 @@ const Sidebar = () => {
             <li className="menu-item">
               <NavLink
                 activeClassName="active"
-                className="menu-link disabled"
+                className="menu-link "
                 to="/customers"
               >
                 <i className="icon fas fa-store-alt"></i>
@@ -88,7 +78,7 @@ const Sidebar = () => {
             <li className="menu-item">
               <NavLink
                 activeClassName="active"
-                className="menu-link disabled"
+                className="menu-link "
                 to="/blog"
               >
                 <i className="icon fas fa-usd-circle"></i>

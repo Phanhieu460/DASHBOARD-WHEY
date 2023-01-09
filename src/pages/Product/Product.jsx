@@ -3,24 +3,19 @@ import React, { useRef, useState } from "react";
 import Sidebar from "../../components/sidebar";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import "antd/dist/antd.css";
-import CreateProduct from "./Modal/CreateProduct";
 import { useEffect } from "react";
-import { deleteProduct, getProduct } from "../../features/Product/productSlice";
 import { useDispatch, useSelector } from "react-redux";
-import EditProduct from "./Modal/EditProduct";
 import Header from "../../components/Header";
-import { listProducts } from "../../Redux/Actions/ProductActions";
+import {
+  deleteProduct,
+  listProducts,
+} from "../../Redux/Actions/ProductActions";
+import { Link, NavLink } from "react-router-dom";
 
 const Product = () => {
-  const [show, setShow] = useState(false);
-  const [dataEdit, setDataEdit] = useState(0);
-  const closeModal = () => setShow(false);
-
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-  const [allProduct, setAllProduct] = useState();
 
   const dispatch = useDispatch();
 
@@ -37,14 +32,7 @@ const Product = () => {
   const onDelete = (id) => {
     if (window.confirm("Bạn có chắc muốn xóa sản phẩm này ?")) {
       dispatch(deleteProduct(id));
-      dispatch(getProduct());
     }
-  };
-
-  const onUpdate = (data) => {
-    console.log("zzz", data);
-    setShow(true);
-    setDataEdit(data);
   };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -191,12 +179,6 @@ const Product = () => {
       width: 100,
       ...getColumnSearchProps("stock"),
     },
-    // {
-    //   title: "Phân Loại",
-    //   dataIndex: "variation",
-    //   key: "variation",
-    //   ...getColumnSearchProps("variation"),
-    // },
     {
       title: "Giá Nhập",
       dataIndex: "salePrice",
@@ -224,8 +206,8 @@ const Product = () => {
       dataIndex: "",
       render: (_, record) => (
         <Space size="middle">
-          <Button type="primary" onClick={() => onUpdate(record._id)}>
-            Sửa
+          <Button type="primary">
+            <Link to={`/product/${record._id}/edit`}>Sửa</Link>
           </Button>
           <Button type="primary" danger onClick={() => onDelete(record._id)}>
             Xóa
@@ -246,7 +228,25 @@ const Product = () => {
             </p>
           </Col>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
-            <CreateProduct />
+            <div
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+                padding: 24,
+                float: "right",
+              }}
+            >
+              <Button>
+                <NavLink
+                  activeClassName="active"
+                  className="menu-link"
+                  to="/addproduct"
+                >
+                  <i className="icon fas fa-cart-plus"></i>
+                  <span className="text">Thêm sản phẩm</span>
+                </NavLink>
+              </Button>
+            </div>
           </Col>
         </Row>
         <Row span={24}>
@@ -255,14 +255,6 @@ const Product = () => {
           </Col>
         </Row>
       </main>
-      {show ? (
-        <EditProduct
-          open={show}
-          closeModal={closeModal}
-          title="Sửa thông tin sản phẩm"
-          dataEdit={dataEdit}
-        />
-      ) : null}
     </>
   );
 };

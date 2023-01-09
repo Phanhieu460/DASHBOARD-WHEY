@@ -7,10 +7,6 @@ import "antd/dist/antd.css";
 import CreateCustomer from "./Modal/CreateCustomer";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import {
-  deleteCustomer,
-  getCustomer,
-} from "../../features/Customer/customerSlice";
 import EditCustomer from "./Modal/EditCustomer";
 
 const Customer = () => {
@@ -20,27 +16,14 @@ const Customer = () => {
 
   const dispatch = useDispatch();
 
-  const { customers } = useSelector((state) => state.customer);
-
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
 
   const [allData, setAllData] = useState();
 
-  useEffect(() => {
-    dispatch(getCustomer());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!customers) return;
-    setAllData(customers.customers);
-  }, [customers]);
-
   const onDelete = (id) => {
     if (window.confirm("Bạn có chắc muốn xóa khách hàng này ?")) {
-      dispatch(deleteCustomer(id));
-      dispatch(getCustomer());
     }
   };
 
