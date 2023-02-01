@@ -72,7 +72,7 @@ const AddBlogMain = () => {
                       </label>
                       <input
                         type="text"
-                        placeholder="Type here"
+                        placeholder="Vui lòng nhập vào đây"
                         className="form-control"
                         id="blog_title"
                         required
@@ -110,7 +110,7 @@ const AddBlogMain = () => {
                       <label className="form-label">Hình ảnh</label>
                       <input
                         type="text"
-                        placeholder="Type here"
+                        placeholder="Vui lòng nhập vào đây"
                         className="form-control"
                         required
                         value={image}

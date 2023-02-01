@@ -3,33 +3,37 @@ import React, { useRef, useState } from "react";
 import Sidebar from "../../components/sidebar";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import "antd/dist/antd.css";
-import CreateCustomer from "./Modal/CreateCustomer";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import EditCustomer from "./Modal/EditCustomer";
+import { Link, NavLink } from "react-router-dom";
+import {
+  deleteCustomer,
+  listCustomers,
+} from "../../Redux/Actions/CustomerActions";
+import Header from "../../components/Header";
+import "antd/dist/antd.css";
 
 const Customer = () => {
-  const [show, setShow] = useState(false);
-  const [dataEdit, setDataEdit] = useState(0);
-  const closeModal = () => setShow(false);
-
   const dispatch = useDispatch();
 
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
 
-  const [allData, setAllData] = useState();
+  const customerList = useSelector((state) => state.customerList);
+  const { customers } = customerList;
+
+  const customerDelete = useSelector((state) => state.customerDelete);
+  const { success: successDelete } = customerDelete;
+
+  useEffect(() => {
+    dispatch(listCustomers());
+  }, [dispatch, successDelete]);
 
   const onDelete = (id) => {
     if (window.confirm("Bạn có chắc muốn xóa khách hàng này ?")) {
+      dispatch(deleteCustomer(id));
     }
-  };
-
-  const onUpdate = (data) => {
-    setShow(true);
-    setDataEdit(data);
   };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -174,8 +178,8 @@ const Customer = () => {
       dataIndex: "",
       render: (_, record) => (
         <Space size="middle">
-          <Button type="primary" onClick={() => onUpdate(record._id)}>
-            Sửa
+          <Button type="primary">
+            <Link to={`/customer/${record._id}/edit`}>Sửa</Link>
           </Button>
           <Button type="primary" danger onClick={() => onDelete(record._id)}>
             Xóa
@@ -185,9 +189,10 @@ const Customer = () => {
     },
   ];
   return (
-    <div style={{ display: "flex" }}>
+    <>
       <Sidebar />
-      <div style={{ flex: 6 }}>
+      <main className="main-wrap">
+        <Header />
         <Row span={24}>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
             <p style={{ fontSize: 18, fontWeight: 700, padding: 24 }}>
@@ -195,24 +200,33 @@ const Customer = () => {
             </p>
           </Col>
           <Col xs={2} sm={4} md={6} lg={8} xl={12}>
-            <CreateCustomer />
+            <div
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+                padding: 24,
+                float: "right",
+              }}
+            >
+              <Button>
+                <NavLink
+                  activeClassName="active"
+                  className="menu-link"
+                  to="/addcustomer"
+                >
+                  <span className="text">Thêm</span>
+                </NavLink>
+              </Button>
+            </div>
           </Col>
         </Row>
         <Row span={24}>
           <Col xs={2} sm={4} md={6} lg={8} xl={24}>
-            <Table columns={columns} dataSource={allData} />
+            <Table columns={columns} dataSource={customers} />
           </Col>
         </Row>
-      </div>
-      {show ? (
-        <EditCustomer
-          open={show}
-          closeModal={closeModal}
-          title="Sửa thông tin khách hàng"
-          dataEdit={dataEdit}
-        />
-      ) : null}
-    </div>
+      </main>
+    </>
   );
 };
 

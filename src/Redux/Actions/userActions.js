@@ -16,6 +16,7 @@ import {
 } from "../Constants/UserContants";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { URL } from "../Url";
 
 // LOGIN
 export const login = (email, password) => async (dispatch) => {
@@ -35,7 +36,7 @@ export const login = (email, password) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `/api/admin/login`,
+      `${URL}/api/admin/login`,
       { email, password },
       config
     );
@@ -87,7 +88,7 @@ export const listUser = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/admin`, config);
+    const { data } = await axios.get(`${URL}/api/admin`, config);
 
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {
@@ -117,7 +118,7 @@ export const register = (name, email, password) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `/api/admin`,
+      `${URL}/api/admin`,
       { name, email, password },
       config
     );
@@ -150,7 +151,7 @@ export const register = (name, email, password) => async (dispatch) => {
 //       },
 //     };
 
-//     const { data } = await axios.get(`/api/admin/${id}`, config);
+//     const { data } = await axios.get(`${URL}/api/admin/${id}`, config);
 //     dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
 //   } catch (error) {
 //     const message =
@@ -183,7 +184,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.put(`/api/admin/profile`, user, config);
+    const { data } = await axios.put(`${URL}/api/admin/profile`, user, config);
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
 

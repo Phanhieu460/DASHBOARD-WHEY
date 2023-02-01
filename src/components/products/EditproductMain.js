@@ -135,7 +135,7 @@ const EditProductMain = (props) => {
                         </label>
                         <input
                           type="text"
-                          placeholder="Type here"
+                          placeholder="Vui lòng nhập vào đây"
                           className="form-control"
                           id="product_title"
                           required
@@ -169,7 +169,7 @@ const EditProductMain = (props) => {
                         </label>
                         <input
                           type="text"
-                          placeholder="Type here"
+                          placeholder="Vui lòng nhập vào đây"
                           className="form-control"
                           id="discount"
                           required
@@ -186,7 +186,7 @@ const EditProductMain = (props) => {
                         </label>
                         <input
                           type="number"
-                          placeholder="Type here"
+                          placeholder="Vui lòng nhập vào đây"
                           className="form-control"
                           id="product_sale_price"
                           required
@@ -203,7 +203,7 @@ const EditProductMain = (props) => {
                         </label>
                         <input
                           type="number"
-                          placeholder="Type here"
+                          placeholder="Vui lòng nhập vào đây"
                           className="form-control"
                           id="product_entry_price"
                           required
@@ -217,7 +217,7 @@ const EditProductMain = (props) => {
                         </label>
                         <input
                           type="text"
-                          placeholder="Type here"
+                          placeholder="Vui lòng nhập vào đây"
                           className="form-control"
                           id="stock"
                           required

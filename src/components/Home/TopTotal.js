@@ -17,8 +17,13 @@ const TopTotal = (props) => {
               <i className="text-primary fas fa-usd-circle"></i>
             </span>
             <div className="text">
-              <h6 className="mb-1">Total Sales</h6>{" "}
-              <span>${totalSale.toFixed(0)}</span>
+              <h6 className="mb-1">Tổng Doanh Thu</h6>{" "}
+              <span>
+                {"₫" +
+                  " " +
+                  Intl.NumberFormat("vi-VN").format(totalSale.toFixed(0)) +
+                  ".000"}
+              </span>
             </div>
           </article>
         </div>

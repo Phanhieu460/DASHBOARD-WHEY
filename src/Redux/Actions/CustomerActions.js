@@ -1,27 +1,27 @@
 import {
-  BLOG_CREATE_FAIL,
-  BLOG_CREATE_REQUEST,
-  BLOG_CREATE_SUCCESS,
-  BLOG_DELETE_FAIL,
-  BLOG_DELETE_REQUEST,
-  BLOG_DELETE_SUCCESS,
-  BLOG_EDIT_FAIL,
-  BLOG_EDIT_REQUEST,
-  BLOG_EDIT_SUCCESS,
-  BLOG_LIST_FAIL,
-  BLOG_LIST_REQUEST,
-  BLOG_LIST_SUCCESS,
-  BLOG_UPDATE_FAIL,
-  BLOG_UPDATE_REQUEST,
-  BLOG_UPDATE_SUCCESS,
-} from "../Constants/BlogConstants";
+  CUSTOMER_CREATE_FAIL,
+  CUSTOMER_CREATE_REQUEST,
+  CUSTOMER_CREATE_SUCCESS,
+  CUSTOMER_DELETE_FAIL,
+  CUSTOMER_DELETE_REQUEST,
+  CUSTOMER_DELETE_SUCCESS,
+  CUSTOMER_EDIT_FAIL,
+  CUSTOMER_EDIT_REQUEST,
+  CUSTOMER_EDIT_SUCCESS,
+  CUSTOMER_LIST_FAIL,
+  CUSTOMER_LIST_REQUEST,
+  CUSTOMER_LIST_SUCCESS,
+  CUSTOMER_UPDATE_FAIL,
+  CUSTOMER_UPDATE_REQUEST,
+  CUSTOMER_UPDATE_SUCCESS,
+} from "../Constants/CustomerConstants";
 import axios from "axios";
 import { logout } from "./userActions";
 import { URL } from "../Url";
 
-export const listBlogs = () => async (dispatch, getState) => {
+export const listCustomers = () => async (dispatch, getState) => {
   try {
-    dispatch({ type: BLOG_LIST_REQUEST });
+    dispatch({ type: CUSTOMER_LIST_REQUEST });
 
     const {
       userLogin: { userInfo },
@@ -33,9 +33,9 @@ export const listBlogs = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`${URL}/api/blogs/all`, config);
+    const { data } = await axios.get(`${URL}/api/customers/all`, config);
 
-    dispatch({ type: BLOG_LIST_SUCCESS, payload: data });
+    dispatch({ type: CUSTOMER_LIST_SUCCESS, payload: data });
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -45,16 +45,16 @@ export const listBlogs = () => async (dispatch, getState) => {
       dispatch(logout());
     }
     dispatch({
-      type: BLOG_LIST_FAIL,
+      type: CUSTOMER_LIST_FAIL,
       payload: message,
     });
   }
 };
 
 // DELETE BLOG
-export const deleteBlog = (id) => async (dispatch, getState) => {
+export const deleteCustomer = (id) => async (dispatch, getState) => {
   try {
-    dispatch({ type: BLOG_DELETE_REQUEST });
+    dispatch({ type: CUSTOMER_DELETE_REQUEST });
 
     const {
       userLogin: { userInfo },
@@ -66,9 +66,9 @@ export const deleteBlog = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`${URL}/api/blogs/${id}`, config);
+    await axios.delete(`${URL}/api/customers/${id}`, config);
 
-    dispatch({ type: BLOG_DELETE_SUCCESS });
+    dispatch({ type: CUSTOMER_DELETE_SUCCESS });
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -78,17 +78,18 @@ export const deleteBlog = (id) => async (dispatch, getState) => {
       dispatch(logout());
     }
     dispatch({
-      type: BLOG_DELETE_FAIL,
+      type: CUSTOMER_DELETE_FAIL,
       payload: message,
     });
   }
 };
 
-// CREATE BLOG
-export const createBlog =
-  (name, description, image, writer) => async (dispatch, getState) => {
+// CREATE CUSTOMER
+export const createCustomer =
+  (name, gender, phone, email, address, numberOfPurchase, customerType) =>
+  async (dispatch, getState) => {
     try {
-      dispatch({ type: BLOG_CREATE_REQUEST });
+      dispatch({ type: CUSTOMER_CREATE_REQUEST });
 
       const {
         userLogin: { userInfo },
@@ -99,19 +100,21 @@ export const createBlog =
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      console.log(name, description);
       const { data } = await axios.post(
-        `${URL}/api/blogs/`,
+        `${URL}/api/customers/`,
         {
           name,
-          description,
-          image,
-          writer,
+          gender,
+          phone,
+          email,
+          address,
+          numberOfPurchase,
+          customerType,
         },
         config
       );
 
-      dispatch({ type: BLOG_CREATE_SUCCESS, payload: data });
+      dispatch({ type: CUSTOMER_CREATE_SUCCESS, payload: data });
     } catch (error) {
       const message =
         error.response && error.response.data.message
@@ -121,18 +124,18 @@ export const createBlog =
         dispatch(logout());
       }
       dispatch({
-        type: BLOG_CREATE_FAIL,
+        type: CUSTOMER_CREATE_FAIL,
         payload: message,
       });
     }
   };
 
-// EDIT BLOG
-export const editBlog = (id) => async (dispatch) => {
+// EDIT CUSTOMER
+export const editCustomer = (id) => async (dispatch) => {
   try {
-    dispatch({ type: BLOG_EDIT_REQUEST });
-    const { data } = await axios.get(`${URL}/api/blogs/${id}`);
-    dispatch({ type: BLOG_EDIT_SUCCESS, payload: data });
+    dispatch({ type: CUSTOMER_EDIT_REQUEST });
+    const { data } = await axios.get(`${URL}/api/customers/${id}`);
+    dispatch({ type: CUSTOMER_EDIT_SUCCESS, payload: data });
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -142,16 +145,16 @@ export const editBlog = (id) => async (dispatch) => {
       dispatch(logout());
     }
     dispatch({
-      type: BLOG_EDIT_FAIL,
+      type: CUSTOMER_EDIT_FAIL,
       payload: message,
     });
   }
 };
 
-// UPDATE BLOG
-export const updateBlog = (blog) => async (dispatch, getState) => {
+// UPDATE CUSTOMER
+export const updateCustomer = (customer) => async (dispatch, getState) => {
   try {
-    dispatch({ type: BLOG_UPDATE_REQUEST });
+    dispatch({ type: CUSTOMER_UPDATE_REQUEST });
 
     const {
       userLogin: { userInfo },
@@ -165,13 +168,13 @@ export const updateBlog = (blog) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.put(
-      `${URL}/api/blogs/${blog._id}`,
-      blog,
+      `${URL}/api/customers/${customer._id}`,
+      customer,
       config
     );
 
-    dispatch({ type: BLOG_UPDATE_SUCCESS, payload: data });
-    dispatch({ type: BLOG_EDIT_SUCCESS, payload: data });
+    dispatch({ type: CUSTOMER_UPDATE_SUCCESS, payload: data });
+    dispatch({ type: CUSTOMER_EDIT_SUCCESS, payload: data });
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -181,7 +184,7 @@ export const updateBlog = (blog) => async (dispatch, getState) => {
       dispatch(logout());
     }
     dispatch({
-      type: BLOG_UPDATE_FAIL,
+      type: CUSTOMER_UPDATE_FAIL,
       payload: message,
     });
   }

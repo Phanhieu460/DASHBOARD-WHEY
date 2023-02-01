@@ -1,18 +1,18 @@
 import React from "react";
 import Sidebar from "../../components/sidebar";
 import Header from "../../components/Header";
-import EditBlogMain from "../../components/blogs/EditBlogMain";
+import OrderMain from "../../components/orders/OrderMain";
 
-const BlogEditScreen = ({ match }) => {
-  const blogId = match.params.id;
+const OrderScreen = () => {
   return (
     <>
       <Sidebar />
       <main className="main-wrap">
         <Header />
-        <EditBlogMain blogId={blogId} />
+        <OrderMain />
       </main>
     </>
   );
 };
-export default BlogEditScreen;
+
+export default OrderScreen;

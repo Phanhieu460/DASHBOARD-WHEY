@@ -1,18 +1,18 @@
 import React from "react";
 import Sidebar from "../../components/sidebar";
 import Header from "../../components/Header";
-import EditBlogMain from "../../components/blogs/EditBlogMain";
+import AddCustomerMain from "../../components/customers/AddCustomerMain";
 
-const BlogEditScreen = ({ match }) => {
-  const blogId = match.params.id;
+const AddCustomer = () => {
   return (
-    <>
+    <div>
       <Sidebar />
       <main className="main-wrap">
         <Header />
-        <EditBlogMain blogId={blogId} />
+        <AddCustomerMain />
       </main>
-    </>
+    </div>
   );
 };
-export default BlogEditScreen;
+
+export default AddCustomer;
