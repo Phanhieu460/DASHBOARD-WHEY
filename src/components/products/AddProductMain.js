@@ -82,6 +82,7 @@ const AddProductMain = () => {
         stock
       )
     );
+    form.resetFields();
   };
 
   return (
