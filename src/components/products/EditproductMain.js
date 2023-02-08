@@ -115,7 +115,7 @@ const EditProductMain = (props) => {
             </div>
           </div>
 
-          <div className="row mb-4">
+          <div className="row mb-4 justify-content-center">
             <div className="col-xl-8 col-lg-8">
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">

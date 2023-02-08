@@ -141,6 +141,7 @@ const Product = () => {
       dataIndex: "name",
       key: "name",
       ...getColumnSearchProps("name"),
+      responsive: ["md"],
     },
     {
       title: "Loại Sản Phẩm",
@@ -148,6 +149,7 @@ const Product = () => {
       key: "category",
       width: 150,
       ...getColumnSearchProps("category"),
+      responsive: ["md"],
     },
     {
       title: "Mô Tả Ngắn",
@@ -156,6 +158,7 @@ const Product = () => {
       width: 250,
       ellipsis: true,
       ...getColumnSearchProps("shortDescription"),
+      responsive: ["md"],
     },
     {
       title: "Mô Tả",
@@ -164,6 +167,7 @@ const Product = () => {
       width: 250,
       ellipsis: true,
       ...getColumnSearchProps("fullDescription"),
+      responsive: ["md"],
     },
     {
       title: "Hình ảnh",
@@ -172,6 +176,7 @@ const Product = () => {
       width: 150,
       ellipsis: true,
       ...getColumnSearchProps("image"),
+      responsive: ["md"],
     },
     {
       title: "Số Lượng",
@@ -179,6 +184,7 @@ const Product = () => {
       key: "stock",
       width: 100,
       ...getColumnSearchProps("stock"),
+      responsive: ["md"],
     },
     {
       title: "Giá Nhập",
@@ -186,6 +192,7 @@ const Product = () => {
       key: "salePrice",
       width: 100,
       ...getColumnSearchProps("salePrice"),
+      responsive: ["md"],
     },
     {
       title: "Giá Bán",
@@ -193,6 +200,7 @@ const Product = () => {
       key: "entryPrice",
       width: 100,
       ...getColumnSearchProps("entryPrice"),
+      responsive: ["md"],
     },
     {
       title: "Giảm Giá",
@@ -200,6 +208,7 @@ const Product = () => {
       key: "discount",
       width: 100,
       ...getColumnSearchProps("discount"),
+      responsive: ["md"],
     },
 
     {
@@ -215,6 +224,7 @@ const Product = () => {
           </Button>
         </Space>
       ),
+      responsive: ["md"],
     },
   ];
   return (
