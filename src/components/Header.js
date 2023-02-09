@@ -75,7 +75,7 @@ const Header = () => {
             <Link className="dropdown-toggle" data-bs-toggle="dropdown" to="#">
               <img
                 className="img-xs rounded-circle"
-                src={process.env.PUBLIC_URL + "/assets/favicon.png"}
+                src="/assets/favicon.png"
                 alt="User"
               />
             </Link>
