@@ -8,7 +8,7 @@ const Sidebar = () => {
         <div className="aside-top">
           <Link to="/" className="brand-wrap">
             <img
-              src={process.env.REACT_APP_API_URL + "/images/logo3.png"}
+              src={process.env.PUBLIC_URL + "/assets/logo3.png"}
               style={{ height: "46" }}
               className="logo"
               alt="Ecommerce dashboard template"
