@@ -75,23 +75,23 @@ const Header = () => {
             <Link className="dropdown-toggle" data-bs-toggle="dropdown" to="#">
               <img
                 className="img-xs rounded-circle"
-                src="/images/favicon.png"
+                src={process.env.REACT_APP_API_URL + "/images/favicon.png"}
                 alt="User"
               />
             </Link>
             <div className="dropdown-menu dropdown-menu-end">
               <Link className="dropdown-item" to="/">
-                My profile
+                Thông Tin
               </Link>
               <Link className="dropdown-item" to="#">
-                Settings
+                Cài Đặt
               </Link>
               <Link
                 onClick={logoutHandler}
                 className="dropdown-item text-danger"
                 to="#"
               >
-                Exit
+                Thoát
               </Link>
             </div>
           </li>
