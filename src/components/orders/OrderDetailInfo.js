@@ -26,9 +26,12 @@ const OrderDetailInfo = (props) => {
           </span>
           <div className="text">
             <h6 className="mb-1">Thông tin đặt hàng</h6>
-            <p className="mb-1">
-              Shipping: {order.shippingAddress.country} <br /> Phương Thức Thanh
-              Toán: {order.paymentMethod}
+            <p className="mb-1">Shipping: {order.shippingAddress.country}</p>
+            <p>
+              Phương Thức Thanh Toán:{" "}
+              {order.paymentMethod === "paypal"
+                ? "Paypal"
+                : "Thanh toán khi nhận hàng"}
             </p>
           </div>
         </article>

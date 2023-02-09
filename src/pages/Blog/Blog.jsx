@@ -164,7 +164,7 @@ const Blog = () => {
       title: "Action",
       dataIndex: "",
       render: (_, record) => (
-        <Space size="middle">
+        <Space size="middle" direction="vertical" align="center">
           <Button type="primary">
             <Link to={`/blog/${record._id}/edit`}>Sửa</Link>
           </Button>

@@ -1,9 +1,8 @@
 import { Button, Row, Col, Table, Input, Space } from "antd";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Header";
 import {
@@ -141,81 +140,63 @@ const Product = () => {
       dataIndex: "name",
       key: "name",
       ...getColumnSearchProps("name"),
-      responsive: ["md"],
     },
     {
       title: "Loại Sản Phẩm",
       dataIndex: "category",
       key: "category",
-      width: 150,
       ...getColumnSearchProps("category"),
-      responsive: ["md"],
     },
     {
       title: "Mô Tả Ngắn",
       dataIndex: "shortDescription",
       key: "shortDescription",
-      width: 250,
       ellipsis: true,
       ...getColumnSearchProps("shortDescription"),
-      responsive: ["md"],
     },
     {
       title: "Mô Tả",
       dataIndex: "fullDescription",
       key: "fullDescription",
-      width: 250,
       ellipsis: true,
       ...getColumnSearchProps("fullDescription"),
-      responsive: ["md"],
     },
     {
       title: "Hình ảnh",
       dataIndex: "image",
       key: "image",
-      width: 150,
       ellipsis: true,
       ...getColumnSearchProps("image"),
-      responsive: ["md"],
     },
     {
       title: "Số Lượng",
       dataIndex: "stock",
       key: "stock",
-      width: 100,
       ...getColumnSearchProps("stock"),
-      responsive: ["md"],
     },
     {
       title: "Giá Nhập",
       dataIndex: "salePrice",
       key: "salePrice",
-      width: 100,
       ...getColumnSearchProps("salePrice"),
-      responsive: ["md"],
     },
     {
       title: "Giá Bán",
       dataIndex: "entryPrice",
       key: "entryPrice",
-      width: 100,
       ...getColumnSearchProps("entryPrice"),
-      responsive: ["md"],
     },
     {
       title: "Giảm Giá",
       dataIndex: "discount",
       key: "discount",
-      width: 100,
       ...getColumnSearchProps("discount"),
-      responsive: ["md"],
     },
-
     {
       title: "Action",
       dataIndex: "",
       render: (_, record) => (
-        <Space size="middle">
+        <Space size="middle" direction="vertical" align="center">
           <Button type="primary">
             <Link to={`/product/${record._id}/edit`}>Sửa</Link>
           </Button>
@@ -224,11 +205,10 @@ const Product = () => {
           </Button>
         </Space>
       ),
-      responsive: ["md"],
     },
   ];
   return (
-    <>
+    <div className="card-body">
       <Sidebar />
       <main className="main-wrap">
         <Header />
@@ -247,14 +227,14 @@ const Product = () => {
                 float: "right",
               }}
             >
-              <Button>
+              <Button type="default">
                 <NavLink
                   activeClassName="active"
                   className="menu-link"
                   to="/addproduct"
                 >
                   <i className="icon fas fa-cart-plus"></i>
-                  <span className="text">Thêm sản phẩm</span>
+                  <span className="text mx-10"> Thêm sản phẩm </span>
                 </NavLink>
               </Button>
             </div>
@@ -266,7 +246,7 @@ const Product = () => {
           </Col>
         </Row>
       </main>
-    </>
+    </div>
   );
 };
 
